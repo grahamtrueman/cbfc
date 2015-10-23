@@ -1,0 +1,22 @@
+td.heading {
+	background-repeat: repeat-x;
+	font-family: sans-serif;
+	font-size: large;
+	font-variant: small-caps;
+	color: Blue;
+	text-align: center;
+}
+td.subheading {
+	background-repeat: no-repeat;
+	font-family: sans-serif;
+	font-size: smaller;
+	font-variant: small-caps;
+	color: Maroon;
+	text-align: center;
+}
+td.leftmenu {
+	font-family: sans-serif;
+	text-align: left;
+	vertical-align: top;
+	color: Blue;
+}

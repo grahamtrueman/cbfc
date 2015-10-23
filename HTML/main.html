@@ -1,0 +1,1092 @@
+<!--TEMPLATE-->
+[[SETENV]]
+[[SETMAINTABLE]]
+
+
+<!--/TEMPLATE-->
+
+<!--SETMAINTABLE-->
+
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<tr>
+			<td class="[[BCOLOR]]" colspan="7">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="tophead" width=20>&nbsp;</td>
+			<td class="tophead" width=240>[[LOGO]]</td>
+			<td width=20 class="title">&nbsp;</td>
+			<td width=240 class="title">Camberley&nbsp;Boys&nbsp;Royals Unofficial&nbsp;Site</td>
+			<td width=20 class="title">&nbsp;</td>
+			<td width=240 class="tophead" valign="bottom" align="right"><b>[[TIMESTAMP]]</b></td>
+			<td class="tophead" width=20>&nbsp;</td>
+		</tr>	
+		<tr>
+			<td class="[[BCOLOR]]" colspan="7">&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="7">[[OPTIONS]]</td>
+		</tr>
+	</table>
+
+<!--/SETMAINTABLE-->
+
+<!--SETENV-->
+	
+	<title>Camberley Boys Royals - Unofficial Site</title>	
+	<link rel="stylesheet" type="text/css" href="http://intranet.micketts.co.uk/style/intranet.css">
+	
+	
+<!--/SETENV-->	
+
+<!--TIMESTAMP-->
+	[[EVAL ( &displayDate(time) )]] [[EVAL ( &displayTime(time,"h:m:s") )]]
+<!--/TIMESTAMP-->
+
+<!--OPTIONS-->
+	[[IF ($Xaction eq '')]]				[[HOMEMENU]]				[[/IF]]
+	[[IF ($Xaction eq 'home')]]			[[TEAMHOME]]				[[/IF]]
+	[[IF ($Xaction eq 'report')]]		[[REPORTS]]					[[/IF]]
+	[[IF ($Xaction eq 'editor')]]		[[EDITOR]]					[[/IF]]
+	
+	[[IF ($Xaction eq 'stats')]]		[[STATS]]					[[/IF]]
+	[[IF ($Xaction eq 'allstats')]]		[[ALLSTATS]]				[[/IF]]
+	
+	[[IF ($Xaction eq 'newPlayer')]]	[[NEWPLAYER]]				[[/IF]]
+	[[IF ($Xaction eq 'addPlayer')]]	[[ADDPLAYER]]				[[/IF]]
+	[[IF ($Xaction eq 'listPlayers')]]	[[LISTPLAYERS]]				[[/IF]]
+	
+	[[IF ($Xaction eq 'newSeason')]]	[[NEWSEASON]]				[[/IF]]
+	[[IF ($Xaction eq 'addSeason')]]	[[ADDSEASON]]				[[/IF]]
+	[[IF ($Xaction eq 'listSeasons')]]	[[LISTSEASONS]]				[[/IF]]
+	
+	[[IF ($Xaction eq 'newTeam')]]		[[NEWTEAM]]					[[/IF]]
+	[[IF ($Xaction eq 'addTeam')]]		[[ADDTEAM]]					[[/IF]]
+	[[IF ($Xaction eq 'listTeams')]]	[[LISTTEAMS]]				[[/IF]]
+	
+	[[IF ($Xaction eq 'addFixture')]]	[[ADDFIXTURE]]				[[/IF]]
+	[[IF ($Xaction eq 'newFixture')]]	[[NEWFIXTURE]]				[[/IF]]
+	
+<!--/OPTIONS-->
+
+<!--HOMEMENU-->
+[[BREADCRUMB]]
+<table cellspacing="2" cellpadding="2" border="2">
+	<tr>
+		<td>[[ADMINMENU1]]</td>
+		<td rowspan="3">[[TEAMLISTING]]</td>
+		<td>This season:<br>[[THISSEASONSUMMARY]]</td>
+	</tr>
+	<tr>
+		<td>[[ADMINMENU2]]</td>
+		<td>[[RANDOMFACTS]]</td>
+	</tr>
+	<tr>
+		<td>Logo</td>
+		<td>Links</td>
+	</tr>
+</table>
+	
+<!--/HOMEMENU-->
+
+<!--ADMINMENU1-->
+View:<ul> 
+		<li>[<a href="/main?action=listPlayers">Players</a>]</li>
+		<li>[<a href="/main?action=listTeams">Teams</a>]</li>
+		<li>[<a href="/main?action=listSeasons">Seasons</a>]</li>
+		[[IF ($Xseason eq '')]]<li>[<a href="/main?action=listStats~season=[[GETTHISSEASON]]">Statistics</a>]</li>[[/IF]]
+		[[IF ($Xseason ne '')]]<li>[<a href="/main?action=listStats~season=[[VERYHARD Xseason]]">Statistics</a>]</li>[[/IF]]
+	</ul>
+<!--/ADMINMENU1-->
+<!--ADMINMENU2-->
+Add:<ul>
+		<li>[<a href="/main?action=newPlayer">Players</a>]</li>
+		<li>[<a href="/main?action=newTeam">Teams</a>]</li>
+		<li>[<a href="/main?action=newSeason">Seasons</a>]</li>
+		<li>[<a href="/main?action=newStat~season=[[VERYHARD Xseason]][[IF ($Xseason eq '')]][[GETTHISSEASON]][[/IF]]">Stats</a>]</li>
+</ul>
+<!--/ADMINMENU2-->
+<!--TEAMLISTING-->
+	<table align-"centre">
+		[[SQL ~
+			SELECT id,imgFile,longName,date_format(startDate,'%b-%y'),date_format(endDate,'%b-%y')
+			FROM seasons
+			ORDER BY id
+			~ssn,img,desc,dfrom,dto~]]
+		<tr>
+			<td><a href="/main?action=home~season=[[ssn]]"><img width="400" border="0" src="[[img]]"></a></td>
+			<td class="subheading">[[desc]]<br>[[dfrom]]-[[dto]]</td>
+		</tr>
+	[[/SQL]]
+	</table>
+<!--/TEAMLISTING-->
+
+<!--BREADCRUMB-->
+[<a href="/main">Home</a>]...other breadcrumbs to be added later
+<!--/BREADCRUMB-->
+
+<!--RANDOMFACTS-->
+Did you know ....<br>
+[[GETTHISRANDOM]]
+<!--/RANDOMFACTS-->
+<!--GETTHISSEASON-->
+[[SQL ~
+	SELECT MAX(id) FROM seasons
+	~thisSeason~]]
+[[/SQL]][[thisSeason]]
+<!--/GETTHISSEASON-->
+
+<!--GETTHISRANDOM-->
+[[SQL ~
+	SELECT (ROUND(RAND() * 10))
+	~thisRandom~]]
+[[/SQL]]
+[[IF ($thisRandom eq '0')]][[TOPAPPEARANCES]][[/IF]]
+[[IF ($thisRandom eq '1')]][[MOSTASSISTS]][[/IF]]
+[[IF ($thisRandom eq '2')]][[MOSTGOALS]][[/IF]]
+[[IF ($thisRandom eq '3')]][[GOALSINGAME]][[/IF]]
+
+<!--/GETTHISRANDOM-->
+
+<!--TEAMHOME-->
+[[BREADCRUMB]]
+	<table align="centre" border=1>
+		<tr>
+			<td>Date</td>
+			<td>Opposition</td>
+			<td>Venue</td>
+			<td>Competition</td>
+			<td>Result</td>
+			<td colspan="3"></td>
+		</tr>
+		[[SQL ~
+			SELECT F.id,DATE_FORMAT(F.`date`,'%d-%b-%y'),T.club, T.team, V.short, S.shortName, F.`for`, F.agst
+			FROM fixtures AS F
+			LEFT JOIN teams AS T
+			ON T.id=F.opposition
+			LEFT JOIN `types` AS S
+			ON S.ID=F.STATUS
+			LEFT JOIN venues AS V
+			ON V.id=F.venue
+			WHERE F.season=[[VERYHARD Xseason]]
+			ORDER BY F.`date`
+			~mId,dte,club,team,venue,comp,for,agst~]]
+		<tr>
+			<td>[[dte]]</td>
+			<td>[[club]]&nbsp;[[team]]</td>
+			<td>[[venue]]</td>
+			<td>[[comp]]</td>
+			<td>[[for]]-[[agst]]</td>
+			<td><a href="/main?action=stats~match=[[mId]]~season=[[VERYHARD Xseason]]">Stats</a></td>
+			<td><a href="/main?action=report~match=[[mId]]~season=[[VERYHARD Xseason]]">Report</a></td>
+			<td><a href="/main?action=photos~match=[[mId]]~season=[[VERYHARD Xseason]]">Photos</a></td>
+		</tr>
+		[[/SQL]]
+	</table>
+	[<a href="/main?action=allstats~season=[[VERYHARD Xseason]]">View overall stats</a>] [<a href="/main?action=newFixture~season=[[VERYHARD Xseason]]">Add New Fixture</a>]
+	
+<!--/TEAMHOME-->
+
+<!--THISSEASONSUMMARY-->
+		<table align="centre" border=1>
+			<tr>
+				<td>Played</td>
+				<td>Won</td>
+				<td>Drawn</td>
+				<td>Lost</td>
+				<td>For</td>
+				<td>Agst</td>
+			</tr>
+			<tr>
+				[[SQL ~
+				SELECT COUNT(*) AS Played, 
+				(SELECT COUNT(*) FROM fixtures WHERE `for` > `agst` AND season=(SELECT MAX(id) FROM seasons)), 
+				(SELECT COUNT(*) FROM fixtures WHERE `for` = `agst` AND season=(SELECT MAX(id) FROM seasons)), 
+				(SELECT COUNT(*) FROM fixtures WHERE `for` < `agst` AND season=(SELECT MAX(id) FROM seasons)), 
+				SUM(`for`),SUM(`agst`) 
+				FROM fixtures 
+				WHERE season=(SELECT MAX(id) FROM seasons)
+				~Pld,wn,dr,lo,fr,ag~]]
+					<td>[[Pld]]</td>
+					<td>[[wn]]</td>
+					<td>[[dr]]</td>
+					<td>[[lo]]</td>
+					<td>[[fr]]</td>
+					<td>[[ag]]</td>
+				[[/SQL]]
+			</tr>	
+			</table>
+<!--/THISSEASONSUMMARY-->
+
+<!--REPORTS-->
+[[BREADCRUMB]]
+	[[IF ($Xedittype eq 'amend')]]				[[MODIFYREPORT]]		[[/IF]]
+	[[IF ($Xedittype eq 'update')]]				[[UPDATEREPORT]]		[[/IF]]
+	[[IF ($Xedittype eq 'delete')]]				[[DELETENOTES]]			[[/IF]]
+	[[IF ($Xedittype eq '')]]					[[REPORTBLOCK]]			[[/IF]]
+<!--/REPORTS-->
+
+<!--REPORTBLOCK-->
+	<table align="centre" border=1>
+		<tr>
+			<td>Date</td>
+			<td>Opposition</td>
+			<td>Venue</td>
+			<td>Competition</td>
+			<td>Result</td>
+		</tr>
+		[[SQL ~
+			SELECT DATE_FORMAT(F.`date`,'%d-%b-%y'),T.club, T.team, V.short, S.shortName, F.`for`, F.`agst`, F.report
+			FROM fixtures AS F
+			LEFT JOIN teams AS T
+			ON T.id=F.opposition
+			LEFT JOIN `types` AS S	
+			ON S.ID=F.STATUS
+			LEFT JOIN venues AS V
+			ON V.id=F.venue
+			WHERE F.id=[[VERYHARD Xmatch]]
+			~dte,club,team,venue,comp,for,agst,rpt~]]
+		[[/SQL]]
+
+		<tr>
+			<td>[[dte]]</td>
+			<td>[[club]]&nbsp;[[team]]</td>
+			<td>[[venue]]</td>
+			<td>[[comp]]</td>
+			<td>[[for]]-[[agst]]</td>
+		</tr>
+		<tr>
+			<td>Scorers:</td>
+			<td colspan="4">[[GOALSCORERS]]</td>
+		</tr>
+		<tr>
+			<td colspan="5">[[rpt]]</td>
+		</tr>
+	</table>
+	[<a href="/main?action=report~match=[[VERYHARD Xmatch]]~season=[[VERYHARD Xseason]]~edittype=amend">Edit this report</a>]
+<!--/REPORTBLOCK-->
+
+<!--MODIFYREPORT-->
+
+	<table align="centre" border=1>
+		<tr>
+			<td>Date</td>
+			<td>Opposition</td>
+			<td>Venue</td>
+			<td>Competition</td>
+			<td>Result</td>
+		</tr>
+		[[SQL ~
+			SELECT DATE_FORMAT(F.`date`,'%Y-%m-%d'),F.opposition,T.club, T.team, V.id, V.short, S.shortName, F.`for`, F.`agst`, F.report, F.notes
+			FROM fixtures AS F
+			LEFT JOIN teams AS T
+			ON T.id=F.opposition
+			LEFT JOIN `types` AS S	
+			ON S.ID=F.STATUS
+			LEFT JOIN venues AS V
+			ON V.id=F.venue
+			WHERE F.id=[[VERYHARD Xmatch]]
+			~dte,opp,club,team,ha,venue,comp,for,agst,rpt,nts~]]
+		[[/SQL]]
+		
+				<form name="editmatch" action="/main" method="post">
+					<input type="Hidden" name="action" value="report">
+					<input type="Hidden" name="edittype" value="update">
+					<input type="Hidden" name="season" value="[[VERYHARD Xseason]]">
+					<input type="Hidden" name="match" value="[[VERYHARD Xmatch]]">
+				<td><input maxLength=10 name="date" value="[[dte]]"></td>
+				<td><select name="opposition">
+				[[SQL ~
+						SELECT id,club,team
+						FROM teams
+						ORDER BY club, team ASC
+						~tId,cName,cTeam~]]
+						<option value="[[tId]]"[[IF ($opp eq [[tId]])]] selected[[/IF]]>[[cName]]&nbsp;[[cTeam]]</option>
+				[[/SQL]]		
+					</select></td>
+				<td><select name="venue">
+				[[SQL ~
+						SELECT id,short
+						FROM venues
+						~vId,vType~]]
+						<option value="[[vId]]"[[IF ($ha eq [[vId]])]] selected[[/IF]]>[[vType]]</option>
+				[[/SQL]]		
+					</select></td>
+				<td><select name="gameStatus">
+				[[SQL ~
+						SELECT id,shortName
+						FROM `types`
+						~sId,sType~]]
+						<option value="[[sId]]"[[IF ($stat eq [[sId]])]] selected[[/IF]]>[[sType]]</option>
+				[[/SQL]]		
+					</select></td>
+				<td><input maxLength=10 name="for" value="[[for]]"></td>
+				<td><input maxLength=10 name="against" value="[[agst]]"></td>
+			</tr>
+			<tr>
+				<td colspan="3">Match report</td>
+				<td colspan="3">My Notes</td>
+			</tr>
+			<tr>
+				<td colspan="3"><textarea name="report" rows="10" cols="60">[[rpt]]</textarea></td>
+				<td colspan="3"><textarea name="mynotes" rows="10" cols="60">[[nts]]</textarea></td>
+			</tr>
+				<tr>
+				<td colspan="6"><input type="submit" value="Enter"></td>
+			</tr>
+			
+				</form>
+		</table>
+
+<!--/MODIFYREPORT-->
+
+<!--UPDATEREPORT-->
+	[[SQLMOD ~
+		UPDATE fixtures
+		SET
+			`date`='[[VERYHARD Xdate]]',
+			`opposition`='[[VERYHARD Xopposition]]',
+			`venue`='[[VERYHARD Xvenue]]',
+			`for`='[[VERYHARD Xfor]]',
+			`agst`='[[VERYHARD Xagainst]]',
+			`status`='[[VERYHARD XgameStatus]]',
+			`report`='[[VERYHARDEVAL (&makesafetext($Xreport) )]]',
+			`notes`='[[VERYHARDEVAL (&makesafetext($Xmynotes) )]]'
+		WHERE
+			id=[[VERYHARD Xmatch]] 
+		~thisTask~]]
+		<font color="Green">Updated</font>
+	[[/SQLMOD/]]
+		<font color="Red">failed to update</font>
+	[[/SQLMOD]]
+<!--/UPDATEREPORT-->
+
+<!--DELETENOTES-->
+	[[IF ($Xremove='all')]]						[[WIPEALLSTATS]]		[[/IF]]
+	[[IF ($Xremove='notes')]]					[[WIPENOTES]]			[[/IF]]
+	[[IF ($Xremove='report')]]					[[WIPEREPORT]]			[[/IF]]
+	[[IF ($Xremove='player')]]					[[WIPEPLAYERRECS]]		[[/IF]]
+	[[IF ($Xremove='player')]]					[[WIPEPLAYERRECS]]		[[/IF]]
+<!--/DELETENOTES-->
+
+<!--WIPEALLSTATS-->
+WIPE ALL RECORDS FOR FIXTURE
+<!--/WIPEALLSTATS-->
+
+<!--WIPENOTES-->
+WIPE NOTES FOR FIXTURE
+<!--/WIPENOTES-->
+
+<!--WIPEREPORT-->
+WIPE MATCH REPORT FOR FIXTURE
+<!--/WIPEREPORT-->
+
+<!--WIPEPLAYERRRECS-->
+WIPE ALL PLAYER RECORDS FOR FIXTURE
+<!--/WIPEPLAYERRRECS-->
+
+<!--STATS-->
+[[BREADCRUMB]]
+[[STATSADJUST]]
+<table align="center" bgcolor="#FFFFFF" cellspacing="20" cellpadding="20" border="1">
+<tr>
+	<td>
+		<table cellspacing="2" cellpadding="2" border="2">
+			<tr>
+				<td colspan="6" valign="top" class="displaybox">In this game</td>
+			</tr>	
+			<tr>
+				<td>Player</td>
+				<td>Goals</td>
+				<td>Assists</td>
+				<td>MoM</td>
+				<td>Ach</td>
+				<td>Other</td>
+			</tr>
+		[[SQL ~
+			SELECT P.safeName,S.goals,S.assists,S.pen_scored,S.MoM,S.achieve,S.yellow,S.red,S.id,P.id
+				FROM stats AS S
+				LEFT JOIN players AS P
+				ON S.playerID=P.id
+				WHERE S.fixtureID=[[VERYHARD Xmatch]]
+				ORDER BY S.MoM DESC, S.achieve DESC ,safeName ASC;
+				~pName,gls,asst,pens,pMoM,pAch,pYel,pRed,sId,pId~]]
+		
+			<tr>
+				<td>[[pName]]</td>
+				<td>[[gls]]</td>
+				<td>[[asst]]</td>
+				<td>[[pMoM]]</td>
+				<td>[[pAch]]</td>
+				<td[[IF ($[[pYel]]=1)]] bgcolor="#ffff00"[[/IF]][[IF ([[pRed]]=1)]] bgcolor="#ff0000"[[/IF]]>&nbsp;</td>
+				<td>[<a href="/main?action=stats~edittype=delete~match=[[VERYHARD Xmatch]]~statID=[[sId]]~season=[[VERYHARD Xseason]]~playerId=[[pId]]">delete</a>]</td>
+			</tr>
+		[[/SQL]]
+		</table>
+
+		</td>
+		<td>
+			<table align="right" cellspacing="2" cellpadding="2" border="2">
+				<tr>
+					<td colspan="8" valign="top" class="displaybox">Season Totals</td>
+				</tr>	
+				<tr>
+					<td>Player</td>
+					<td>Apps</td>
+					<td>Goals</td>
+					<td>Assists</td>
+					<td>MotM</td>
+					<td>Achv</td>
+					<td colspan="2">Disc</td>
+				</tr>
+			[[SQL ~
+				SELECT P.safeName,COUNT(*) AS Apps,SUM(S.goals),SUM(S.assists),SUM(S.pen_scored),SUM(S.yellow),SUM(S.red),SUM(S.mom),SUM(achieve)
+					FROM stats AS S
+					LEFT JOIN players AS P
+					ON S.playerID=P.id
+					LEFT JOIN fixtures AS F
+					ON F.id=S.fixtureID
+					WHERE F.season=[[VERYHARD Xseason]]
+					GROUP BY P.safeName
+					ORDER BY Apps DESC
+					~pName,pApp,pGls,pAsst,pPen,pYel,pRed,pMoM,pAch~]]
+				<tr>
+					<td>[[pName]]</td>
+					<td>[[pApp]]</td>
+					<td>[[pGls]][[IF ([[pPen]]==1)]] ([[pPen]] pen)[[/IF]][[IF ([[pPen]]>1)]] ([[pPen]] pens)[[/IF]]</td>
+					<td>[[pAsst]]</td>
+					<td>[[pMoM]]</td>
+					<td>[[pAch]]</td>
+					[[IF ([[pYel]]>0)]]<td bgcolor="#ffff00">[[pYel]]</td>[[/IF]]
+					[[IF ([[pRed]]>0)]]<td bgcolor="#ff0000">[[pRed]]</td>[[/IF]]
+				</tr>
+			[[/SQL]]
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>[[DISPLAYLEAGUETABLE]]</td>
+	</tr>
+	<tr>
+		<td colspan="6">[<a href="/main?action=[[VERYHARD Xaction]]~match=[[VERYHARD Xmatch]]~season=[[VERYHARD Xseason]]~edittype=NEW">ADD PLAYER STATISTIC</a>]</td>
+	</tr>
+</table>
+<!--/STATS-->
+
+<!--STATSADJUST-->
+	[[IF ($Xedittype eq 'NEW')]]				[[NEWPLAYERSTAT]]			[[/IF]]
+	[[IF ($Xedittype eq 'add')]]				[[ADDPLAYERSTAT]]			[[/IF]]
+	[[IF ($Xedittype eq 'delete')]]				[[DELPLAYERSTAT]]			[[/IF]]
+<!--/STATSADJUST-->
+
+<!--NEWPLAYERSTAT-->
+		<table>
+			<tr>
+				<td>Player Name</td>
+				<td>Goals</td>
+				<td>Pen Scored</td>>
+				<td>Pen Taken</td>>
+				<td>Assists</td>
+				<td>Yellow</td>
+				<td>Red</td>
+				<td>Man of Match</td>
+				<td>Achievement</td>
+				<td>Submit</td>
+			</tr>
+				<form name="addplayerstat" action="/main" method="post">
+					<input type="Hidden" name="action" value="stats">
+					<input type="Hidden" name="edittype" value="add">
+					<input type="Hidden" name="season" value="[[VERYHARD Xseason]]">
+					<input type="Hidden" name="match" value="[[VERYHARD Xmatch]]">
+			<tr>				
+				<td><select name="player">
+					<option value="0">Select Player</option>
+				[[SQL ~
+						SELECT id,safeName
+						FROM players
+						WHERE hidden = '0'
+						ORDER BY safeName ASC
+						~pId,pName~]]
+					<option value="[[pId]]">[[pName]]</option>
+				[[/SQL]]		
+					</select></td>
+				<td><input maxLength=10 name="gls" value="[[gls]]"></td>
+				<td><input maxLength=10 name="pens" value="[[pens]]"></td>
+				<td><input maxLength=10 name="pen_taken" value="[[pen_taken]]"></td>
+				<td><input maxLength=10 name="asst" value="[[asst]]"></td>
+				<td><input maxLength=10 name="yel" value="[[yel]]"></td>
+				<td><input maxLength=10 name="red" value="[[red]]"></td>
+				<td><input maxLength=10 name="mom" value="[[mom]]"></td>
+				<td><input maxLength=10 name="ach" value="[[ach]]"></td>
+				<td><input type="submit" value="Enter"></td>
+			</tr>	
+		</table>
+		</form>
+<!--/NEWPLAYERSTAT-->
+
+<!--ADDPLAYERSTAT-->
+	[[SQL ~
+		INSERT INTO stats
+		value (NULL,'[[VERYHARD Xplayer]]','[[VERYHARD Xmatch]]','[[VERYHARD Xgls]]','[[VERYHARD Xasst]]','[[VERYHARD Xpen_taken]]','[[VERYHARD Xpens]]','[[VERYHARD Xyel]]','[[VERYHARD Xred]]','[[VERYHARD Xach]]','[[VERYHARD Xmom]]')
+		~~]]
+	[[/SQL]]
+<!--/ADDPLAYERSTAT-->
+
+<!--DELPLAYERSTAT-->
+	[[SQLMOD ~	
+		DELETE from stats
+		WHERE fixtureID=[[VERYHARD Xmatch]]
+		AND playerID='[[VERYHARD XplayerId]]'
+		~~]]
+		<font color="Green">Record deleted</font>
+	[[/SQLMOD/]]
+		<font color="Red">failed to remove record</font>
+	[[/SQLMOD]]
+<!--/DELPLAYERSTAT-->
+
+<!--GOALSCORERS-->
+	[[SQL ~
+		SELECT P.safeName,S.goals, S.pen_scored
+		FROM stats AS S
+		LEFT JOIN players AS P
+		ON S.playerID=P.id
+		WHERE goals > 0 AND fixtureID=[[VERYHARD Xmatch]]
+		ORDER BY S.goals DESC
+		~sName,sGoals,sPens~]]
+		[[sName]]&nbsp;([[sGoals]]),&nbsp;
+	[[/SQL]]
+<!--/GOALSCORERS-->
+
+<!--NEWPLAYER-->
+[[BREADCRUMB]]
+			<table>
+				<tr>
+					<td colspan="2">Add new Player</td>
+				</tr>
+				<form name="newPlayer" action="/main" method="post">
+				<input type="Hidden" name="action" value="addPlayer">
+				<tr>
+					<td>First Name</td>
+					<td><input maxLength=32 name="playerFirstName" value=""> </td>
+				</tr>
+				<tr>
+					<td>Second Name</td>
+					<td><input maxLength=32 name="playerSecondName" value=""> </td>
+				</tr>
+				<tr>
+					<td>Short Name</td>
+					<td><input maxLength=32 name="playerShortName" value=""> </td>
+				</tr>
+				<tr>
+					<td>Primary Position</td>
+					<td><input maxLength=32 name="playerPrimePos" value=""> </td>
+				</tr>
+				<tr>
+					<td>Secondary Position</td>
+					<td><input maxLength=32 name="playerSecPos" value=""> </td>
+				</tr>
+				<tr>
+					<td>Preferred foot</td>
+					<td><input maxLength=32 name="playerFoot" value=""> </td>
+				</tr>
+				<tr>
+					<td>Date of Birth (yyyy-MM-dd)</td>
+					<td><input maxLength=10 name="playerDateBirth" value=""></td>
+				</tr>	
+				<tr>
+					<td>Parental contact</td>
+					<td><input maxLength=11 name="playerContact" value=""> </td>
+				</tr>
+				<tr>
+					<td>Notes</td>
+					<td><input maxLength=32 name="playerNotes" value=""> </td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type=submit value="Add" class="sumbit1"></td>
+				</tr>	
+				<input type="hidden" name="season" value="[[VERYHARD Xseason]]">
+				</form>
+			</table>
+<!--/NEWPLAYER-->
+
+<!--ADDPLAYER-->
+	[[SQL ~
+		INSERT INTO players
+		value (NULL,'[[VERYHARD XplayerFirstName]]','[[VERYHARD XplayerSecondName]]','[[VERYHARD XplayerShortName]]','[[VERYHARD XplayerPrimePos]]','[[VERYHARD XplayerSecPos]]','[[VERYHARD XplayerFoot]]','[[VERYHARD XplayerDateBirth]]','[[VERYHARD XplayerContact]]','[[VERYHARD XplayerNotes]]',0)
+		~~]]
+	[[/SQL]]
+	[[STARTMENU]]
+<!--/ADDPLAYER-->
+
+<!--LISTPLAYERS-->
+[[BREADCRUMB]]
+	<table align="centre" border=1>
+		<tr>
+			<td>Full Name</td>
+			<td>Short Name</td>
+			<td>Primary Position</td>
+			<td>Secondary Position</td>
+			<td>Preferred Foot</td>
+			<td>Date of Birth</td>
+			<td>Parental Contact</td>
+			<td>Notes</td>
+			<td>Actions</td>
+		</tr>
+		[[SQL ~
+			SELECT id,firstName,secondName,safeName,primaryPos,secondaryPos,prefFoot,date_format(dateBirth,'%d-%b-%y'),contact,playerNotes
+			FROM players
+			~id,fn,sn,shn,pp,sp,pf,db,pc,nt~]]
+		<tr>
+			<td>[[fn]]&nbsp;[[sn]]</td>
+			<td>[[shn]]</td>
+			<td>[[pp]]</td>
+			<td>[[sp]]</td>
+			<td>[[pf]]</td>
+			<td>[[db]]</td>
+			<td>[[pc]]</td>
+			<td>[[nt]]</td>
+			<td>[<a href="/main?action=editor~editPlayer=true~team=[[id]]">Edit</a>]</td>
+		</tr>
+		[[/SQL]]
+	</table>
+<!--/LISTPLAYERS-->
+
+<!--NEWSEASON-->
+[[BREADCRUMB]]
+			<table>
+				<tr>
+					<td colspan="2">Add new details</td>
+				</tr>
+				<form name="newseason" action="/main" method="post">
+				<input type="Hidden" name="action" value="addSeason">
+				<tr>
+					<td>Division (e.g. Div 4)</td>
+					<td><input maxLength=8 name="divName" value="DIV 4"> </td>
+				</tr>
+				<tr>
+					<td>League (e.g. EBYFL)</td>
+					<td><input maxLength=6 name="leagueName" value="EBYFL"></td>
+				</tr>
+				<tr>
+					<td>Start Date (yyyy-MM-dd)</td>
+					<td><input maxLength=10 name="startDate" value="2012-01-01"></td>
+				</tr>
+				<tr>
+					<td>End Date (yyyy-MM-dd)</td>
+					<td><input maxLength=10 name="endDate" value="2015-12-31"></td>
+				</tr>
+				<tr>
+					<td>Long Name (age - league, div)</td>
+					<td><input maxLength=64 name="longName" value="U15 - EBYFL Division 4"</td>
+				</tr>
+				<tr>
+					<td>Short Name (age Div)</td>
+					<td><input maxLength=10 name="shortName" value="U15 DIV4"></td>
+				</tr>
+				<tr>
+					<td>Location of Image file</td>
+					<td><input maxLength=64 name="imgFile" value="/images/"> </td>
+				</tr>
+				<tr>
+					<td>Age Group (e.g 12)</td>
+					<td><input maxLength=2 name="ageGroup" value="15"> </td>
+				</tr>	
+				<tr>
+					<td></td>
+					<td><input type=submit value="Add" class="sumbit1"></td>
+				</tr>	
+				<input type="hidden" name="season" value="[[VERYHARD Xseason]]">
+				</form>
+			</table>
+<!--/NEWSEASON-->
+
+<!--ADDSEASON-->
+	[[SQL ~
+		INSERT INTO seasons
+		value (NULL,'[[VERYHARD XdivName]]','[[VERYHARD XleagueName]]','[[VERYHARD XstartDate]]','[[VERYHARD XendDate]]','[[VERYHARD XlongName]]','[[VERYHARD XshortName]]','[[VERYHARD XingFile]]','[[VERYHARD XageGroup]]')
+		~~]]
+	[[/SQL]]
+	[[STARTMENU]]
+<!--/ADDSEASON-->
+
+<!--LISTSEASONS-->
+[[BREADCRUMB]]
+	<table align="centre" border=1>
+		<tr>
+			<td>Division</td>
+			<td>League</td>
+			<td>Dates</td>
+			<td>Details</td>
+			<td>Actions</td>
+		</tr>
+		[[SQL ~
+			SELECT id,division,league,date_format(startDate,'%d-%b-%y'),date_format(endDate,'%d-%b-%y'),longName
+			FROM seasons
+			ORDER BY startDate ASC
+			~sId,div,lge,frm,til,desc~]]
+		<tr>
+			<td>[[div]]</td>
+			<td>[[lge]]</td>
+			<td>[[frm]]-[[til]]</td>
+			<td>[[desc]]</td>
+			<td>[<a href="/main?action=editor~editLeague=true~season=[[sId]]">Edit</a>]</td>
+		</tr>
+		[[/SQL]]
+	</table>
+<!--/LISTSEASONS-->
+
+<!--NEWTEAM-->
+			<table>
+				<tr>
+					<td colspan="2">Add new team</td>
+				</tr>
+				<form name="newteam" action="/main" method="post">
+				<input type="Hidden" name="action" value="addTeam">
+				<tr>
+					<td>Club Name</td>
+					<td><input maxLength=32 name="clubName" value=""> </td>
+				</tr>
+				<tr>
+					<td>Team Name (e.g Blues)</td>
+					<td><input maxLength=16 name="teamName" value=""></td>
+				</tr>	
+				<tr>
+					<td></td>
+					<td><input type=submit value="Add" class="sumbit1"></td>
+				</tr>	
+				<input type="hidden" name="season" value="[[VERYHARD Xseason]]">
+				</form>
+			</table>
+<!--/NEWTEAM-->
+
+<!--ADDTEAM-->
+	[[SQL ~
+		INSERT INTO teams
+		value (NULL,'[[VERYHARD XclubName]]','[[VERYHARD XteamName]]')
+		~~]]
+	[[/SQL]]
+	[[STARTMENU]]
+<!--/ADDTEAM-->
+
+<!--LISTTEAMS-->
+[[BREADCRUMB]]
+	<table align="centre" border=1>
+		<tr>
+			<td>Club</td>
+			<td>Team</td>
+			<td>Actions</td>
+		</tr>
+		[[SQL ~
+			SELECT id,club,team
+			FROM teams
+			ORDER BY club,team ASC
+			~id,club,team~]]
+		<tr>
+			<td>[[club]]</td>
+			<td>[[team]]</td>
+			<td>[<a href="/main?action=editor~editTeam=true~team=[[id]]">Edit</a>]</td>
+		</tr>
+		[[/SQL]]
+	</table>
+<!--/LISTTEAMS-->
+
+<!--ALLSTATS-->
+[[BREADCRUMB]]
+<table>
+	<tr>
+		<td>
+			<table cellspacing="2" cellpadding="2" border="2">
+				<tr>
+					<td valign="top" class="displaybox" colspan="13">Team Statistics</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td colspan="5" align="center">H O M E</td>
+					<td colspan="5" align="center">A W A Y</td>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td>Pld</td>
+					<td>Won</td>
+					<td>Drw</td>
+					<td>Lst</td>
+					<td>For</td>
+					<td>Ags</td>
+					<td>Won</td>
+					<td>Drw</td>
+					<td>Lst</td>
+					<td>For</td>
+					<td>Ags</td>
+					<td>Diff</td>
+					<td>Pts</td>
+				</tr>
+				<tr>
+				[[SQL ~
+					SELECT COUNT(*) 
+					FROM fixtures
+					~tpld~]]
+					<td>[[tPld]]</td>
+				[[/SQL]]		
+				[[SQL ~
+				SELECT COUNT(*) AS Played,
+				(SELECT COUNT(*) FROM fixtures WHERE `for` > `agst` AND venue=1),
+				(SELECT COUNT(*) FROM fixtures WHERE `for` = `agst` AND venue=1),
+				(SELECT COUNT(*) FROM fixtures WHERE `for` < `agst` AND venue=1),
+				SUM(`for`),SUM(`agst`)
+				FROM fixtures
+				WHERE venue=1
+				~hPld,hw,hd,hl,hf,ha~]]
+					<td>[[hw]]</td>
+					<td>[[hd]]</td>
+					<td>[[hl]]</td>
+					<td>[[hf]]</td>
+					<td>[[ha]]</td>
+				[[/SQL]]
+				[[SQL ~
+				SELECT COUNT(*) AS Played,
+				(SELECT COUNT(*) FROM fixtures WHERE `for` > `agst` AND venue>1),
+				(SELECT COUNT(*) FROM fixtures WHERE `for` = `agst` AND venue>1),
+				(SELECT COUNT(*) FROM fixtures WHERE `for` < `agst` AND venue>1),
+				SUM(`for`),SUM(`agst`)
+				FROM fixtures
+				WHERE venue>1
+				~aPld,aw,ad,al,af,aa~]]
+					<td>[[aw]]</td>
+					<td>[[ad]]</td>
+					<td>[[al]]</td>
+					<td>[[af]]</td>
+					<td>[[aa]]</td>
+				[[/SQL]]
+				[[SQL ~
+				SELECT COUNT(*) AS Played,
+				SUM(`for`),SUM(`agst`),(SUM(`for`))-(SUM(`agst`)),
+				(SELECT COUNT(*) FROM fixtures WHERE `for` > `agst`)*3+(SELECT COUNT(*) FROM fixtures WHERE `for` = `agst`)
+				FROM fixtures
+				~tpd,tf,ta,gd,tPts~]]
+					<td>([[tf]]-[[ta]]): [[gd]]</td>
+					<td>[[tPts]]</td>
+				[[/SQL]]
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table cellspacing="2" cellpadding="2" border="2">
+				<tr>
+					<td align="top" class="displaybox" colspan="13">Player Statistics</td>
+				</tr>
+				<tr>
+					<td>Name</td>
+					<td>App</td>
+					<td>Goals</td>
+					<td>Pens Taken</td>
+					<td>Assists</td>
+					<td>MoM</td>
+					<td>Ach</td>
+					<td colspan="2">Disc</td>
+				</tr>
+				[[SQL ~
+					SELECT CONCAT(P.safeName),COUNT(*) AS Played,SUM(S.goals), SUM(S.pen_scored), SUM(S.pen_taken), SUM(S.assists), SUM(S.MoM),SUM(S.achieve),SUM(S.yellow),SUM(S.red)
+					FROM stats AS S
+					LEFT JOIN fixtures AS F
+					ON S.fixtureID=F.id
+					LEFT JOIN players AS P
+					ON P.id=S.playerID
+					GROUP BY S.playerID
+					ORDER BY Played DESC
+					~pName,pApps,pGls,pPens,pTaken,pAsst,pMoM,pAch,pYel,pRed~]]
+				<tr>
+					<td>[[pName]]</td>
+					<td>[[pApps]]</td>
+					<td>[[pGls]] [[IF ([[pPens]] ==1)]] (1 pen)[[/IF]][[IF ([[pPens]] >1)]] ([[pPens]] pens)[[/IF]]</td>
+					<td>[[pTaken]]</td>
+					<td>[[pAsst]]</td>
+					<td>[[pMoM]]</td>
+					<td>[[pAch]]</td>
+					[[IF ([[pYel]]>0)]]<td bgcolor="#ffff00">[[pYel]]</td>[[/IF]]
+					[[IF ([[pRed]]>0)]]<td bgcolor="#ff0000">[[pRed]]</td>[[/IF]]
+				</tr>
+				[[/SQL]]
+			</table>
+		
+		</td>
+	</tr>
+
+</table>
+<!--/ALLSTATS-->
+
+<!--NEWFIXTURE-->
+[[BREADCRUMB]]
+		<table>
+			<tr>
+				<td>Date</td>
+				<td>Opposition</td>
+				<td>Venue</td>
+				<td>Status</td>
+				<td>For</td>
+				<td>Against</td>
+			</tr>
+			<tr>
+				<form name="newmatch" action="/main" method="post">
+					<input type="Hidden" name="action" value="addFixture">
+					<input type="Hidden" name="season" value="[[VERYHARD Xseason]]">
+				<td><input maxLength=10 name="date" value="[[dte]]"></td>
+				<td><select name="opposition">
+				[[SQL ~
+						SELECT id,club,team
+						FROM teams
+						ORDER BY club ASC
+						~tId,cName,cTeam~]]
+						<option value="[[tId]]"[[IF ($opp eq [[tId]])]] selected[[/IF]]>[[cName]]&nbsp;[[cTeam]]</option>
+				[[/SQL]]		
+					</select></td>
+				<td><select name="venue">
+				[[SQL ~
+						SELECT id,short
+						FROM venues
+						~vId,vType~]]
+						<option value="[[vId]]"[[IF ($ha eq [[vId]])]] selected[[/IF]]>[[vType]]</option>
+				[[/SQL]]		
+					</select></td>
+				<td><select name="gameStatus">
+				[[SQL ~
+						SELECT id,shortName
+						FROM `types`
+						~sId,sType~]]
+						<option value="[[sId]]"[[IF ($stat eq [[sId]])]] selected[[/IF]]>[[sType]]</option>
+				[[/SQL]]		
+					</select></td>
+				<td><input maxLength=10 name="for" value="[[for]]"></td>
+				<td><input maxLength=10 name="against" value="[[agst]]"></td>
+			</tr>
+			<tr>
+				<td colspan="3">Our report</td>
+			</tr>
+			<tr>
+				<td colspan="3"><textarea name="report" rows="10" cols="60">[[rpt]]</textarea></td>
+			</tr>
+			<tr>
+				<td colspan="3"><textarea name="notes" rows="10" cols="60">[[mynotes]]</textarea></td>
+			</tr>
+				<tr>
+				<td colspan="3"><input type="submit" value="Enter"></td>
+			</tr>
+				</form>
+		</table>
+	
+<!--/NEWFIXTURE-->
+
+<!--ADDFIXTURE-->
+[[BREADCRUMB]]
+	[[SQL ~
+		INSERT INTO fixtures
+		value (NULL,'[[VERYHARD Xseason]]','[[VERYHARD Xdate]]','[[VERYHARD Xopposition]]','[[VERYHARD Xvenue]]','[[VERYHARD Xfor]]','[[VERYHARD Xagainst]]','[[VERYHARD XgameStatus]]','[[VERYHARDEVAL (&makesafetext($Xreport) )]]','[[VERYHARDEVAL (&makesafetext($Xnotes) )]]')
+		~~]]
+	[[/SQL]]
+<!--/ADDFIXTURE-->
+
+<!--DISPLAYLEAGUETABLE-->
+
+<table>
+	<tr>
+		<td>Club</td>
+		<td>Won</td>
+		<td>Draw</td>
+		<td>Lost</td>
+		<td>For</td>
+		<td>Agst</td>
+		<td>Diff</td>
+		<td>Pts</td>
+	</tr>
+	[[SQL ~
+		SELECT T.club, T.team, L.w, L.d, L.l, L.f, L.a, (L.f)-(L.a) AS diff, (L.w*3)+L.d AS pts
+			FROM leagueTable AS L
+			LEFT JOIN teams AS T
+			ON T.id = L.team
+			WHERE L.season = [[VERYHARD Xseason]]
+			ORDER BY pts DESC, diff DESC
+			~tclub,tteam,twon,tdraw,tlost,tfor,tagst,tdiff,tpts~]]
+	<tr>
+		<td>[[tclub]]&nbsp;[[tteam]]</td>
+		<td>[[twon]]</td>
+		<td>[[tdraw]]</td>
+		<td>[[tlost]]</td>
+		<td>[[tfor]]</td>
+		<td>[[tagst]]</td>
+		<td>[[tdiff]]</td>
+		<td>[[tpts]]</td>
+	</tr>
+	[[/SQL]]
+</table>
+<!--/DISPLAYLEAGUETABLE-->
+
+<!--STARTMENU-->[[BREADCRUMB]]<!--/STARTMENU-->
+
+<!--RANDOMSTATSAREA-->
+The following section is for all those random stats ...
+<!--/RANDOMSTATSAREA-->
+
+<!--TOPAPPEARANCES-->
+		[[SQL ~
+			SELECT CONCAT(P.safeName),COUNT(*) AS Played,SUM(S.goals), SUM(S.pen_scored), SUM(S.pen_taken), SUM(S.assists), SUM(S.MoM),SUM(S.achieve),SUM(S.yellow),SUM(S.red)
+				FROM stats AS S
+				LEFT JOIN fixtures AS F
+				ON S.fixtureID=F.id
+				LEFT JOIN players AS P
+				ON P.id=S.playerID
+				GROUP BY S.playerID
+				ORDER BY Played ASC
+				~pName,pApps,pGls,pPens,pTaken,pAsst,pMoM,pAch,pYel,pRed~]]
+		[[/SQL]]
+		[[pName]] has played a record [[pApps]] times for the club.
+<!--/TOPAPPEARANCES-->
+
+<!--MOSTASSISTS-->
+		[[SQL ~
+			SELECT CONCAT(P.safeName),COUNT(*) AS Played,SUM(S.goals), SUM(S.pen_scored), SUM(S.pen_taken), SUM(S.assists) AS Assists, SUM(S.MoM),SUM(S.achieve),SUM(S.yellow),SUM(S.red)
+				FROM stats AS S
+				LEFT JOIN fixtures AS F
+				ON S.fixtureID=F.id
+				LEFT JOIN players AS P
+				ON P.id=S.playerID
+				GROUP BY S.playerID
+				ORDER BY Assists ASC
+				~pName,pApps,pGls,pPens,pTaken,pAsst,pMoM,pAch,pYel,pRed~]]
+		[[/SQL]]
+		[[pName]] has the most assists ([[pAsst]]) in [[pApps]] appearances for the club.
+<!--/MOSTASSISTS-->
+
+<!--MOSTGOALS-->
+		[[SQL ~
+			SELECT CONCAT(P.safeName),COUNT(*) AS Played,SUM(S.goals) AS gs, SUM(S.pen_scored), SUM(S.pen_taken), SUM(S.assists), SUM(S.MoM),SUM(S.achieve),SUM(S.yellow),SUM(S.red)
+				FROM stats AS S
+				LEFT JOIN fixtures AS F
+				ON S.fixtureID=F.id
+				LEFT JOIN players AS P
+				ON P.id=S.playerID
+				GROUP BY S.playerID
+				ORDER BY gs ASC
+				~pName,pApps,pGls,pPens,pTaken,pAsst,pMoM,pAch,pYel,pRed~]]
+		[[/SQL]]
+		[[pName]] is our all time record goalscorer, with [[pGls]] in [[pApps]] games.
+<!--/MOSTGOALS-->
+
+<!--GOALSINGAME-->
+		[[SQL ~ 
+			SELECT MAX(goals) 
+			FROM stats
+			~gls~]]
+		The most goals scored in a game is [[gls]] by:
+		[[/SQL]]
+		[[SQL	
+			SELECT COUNT(S.playerID), P.safeName, S.goals 
+			FROM stats AS S
+			LEFT JOIN players AS P
+			ON P.id=S.playerID
+			WHERE S.goals = (SELECT MAX(goals) FROM stats) GROUP BY S.playerID
+			~xTimes,pName~]]
+			[[pName]] [[IF ($xTimes ne '1')]](x[[xTimes]])[[/IF]]
+		[[/SQL]]	
+<!--/GOALSINGAME-->
+
+
+[[IF ($thisRandom eq '0')]][[TOPAPPEARANCES]][[/IF]]
